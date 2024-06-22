@@ -1,0 +1,1 @@
+{"version":3,"sources":["app.js"],"names":["clientId","DiscordRPC","require"],"mappings":";;AAAA,IAAMA,QAAQ,GAAG,qBAAjB;;AACA,IAAMC,UAAU,GAAGC,OAAO,CAAC,aAAD,CAA1B","sourcesContent":["const clientId = \"1254145695762485248\";\r\nconst DiscordRPC = require(\"discord-rpc\");"],"file":"app.dev.js"}
