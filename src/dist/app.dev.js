@@ -232,4 +232,5 @@ RPC.login({
 })["catch"](function (err) {
   return console.error(err);
 });
+setSpotifyRPC();
 //# sourceMappingURL=app.dev.js.map
