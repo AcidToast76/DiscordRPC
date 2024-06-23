@@ -35,8 +35,10 @@ function setActivity() {
         case 6:
           _spotifyRPC$song = spotifyRPC.song, title = _spotifyRPC$song.name, artists = _spotifyRPC$song.artists, album = _spotifyRPC$song.album, url = _spotifyRPC$song.url;
           RPC.setActivity({
-            details: title + " by " + artists.join(", "),
             state: "Listening To:",
+            details: title,
+            " by ": artists,
+            " on ": album,
             largeImageKey: "large",
             largeImageText: "Large Image",
             smallImageKey: "small",
@@ -48,6 +50,9 @@ function setActivity() {
             }, {
               label: "Spotify",
               url: "https://open.spotify.com/user/hpjv09y99ucx7adf3jb6qijvp?si=40ac1fa71e7d44ee"
+            }, {
+              label: "Song",
+              url: url
             }]
           });
 

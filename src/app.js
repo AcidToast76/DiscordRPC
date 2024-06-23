@@ -27,7 +27,7 @@ async function setActivity() {
             },
             { 
                 label: "Spotify", url: "https://open.spotify.com/user/hpjv09y99ucx7adf3jb6qijvp?si=40ac1fa71e7d44ee" 
-            }
+            },
             {
                 label: "Song", url: url
             }
