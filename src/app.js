@@ -2,6 +2,7 @@ const clientId = "1254145695762485248";
 const DiscordRPC = require("discord-rpc");
 const RPC = new DiscordRPC.Client({ transport: "ipc" });
 
+
 DiscordRPC.register(clientId);
 
 async function spotifyrpc (url) {
@@ -67,4 +68,46 @@ RPC.on("ready", async () => {
     }, 15e3);
 });
 
+
+// Function to fetch the currently playing track from Spotify
+async function fetchCurrentlyPlayingTrack() {
+    const response = await fetch("https://spotify.thefemdevs.com/playing/nezha", {
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch currently playing track");
+    }
+
+    const data = await response.json();
+    return {
+        trackName: data.item.name,
+        artistName: data.item.artists.map(artist => artist.name).join(", "),
+        trackUrl: data.item.external_urls.spotify,
+    };
+}
+
+// Function to update Discord RPC with Spotify track information
+async function updateDiscordRPCWithSpotify() {
+    try {
+        const { trackName, artistName, trackUrl } = await fetchCurrentlyPlayingTrack(accessToken);
+
+        RPC.setActivity({
+            details: `Listening to ${trackName}`,
+            state: `by ${artistName}`,
+            largeImageKey: "spotify",
+            buttons: [{ label: "Listen on Spotify", url: trackUrl }]
+        });
+    } catch (error) {
+        console.error("Failed to update Discord RPC with Spotify:", error);
+    }
+}
+
+// Example usage
+RPC.on("ready", async () => {
+    updateDiscordRPCWithSpotify();
+    setInterval(updateDiscordRPCWithSpotify, 15e3); // Update every 15 seconds
+});
+
 RPC.login({ clientId }).catch(err => console.error(err));
+
+setSpotifyRPC()

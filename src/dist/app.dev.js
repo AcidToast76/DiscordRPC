@@ -126,6 +126,106 @@ RPC.on("ready", function _callee() {
       }
     }
   });
+}); // Function to fetch the currently playing track from Spotify
+
+function fetchCurrentlyPlayingTrack() {
+  var response, data;
+  return regeneratorRuntime.async(function fetchCurrentlyPlayingTrack$(_context5) {
+    while (1) {
+      switch (_context5.prev = _context5.next) {
+        case 0:
+          _context5.next = 2;
+          return regeneratorRuntime.awrap(fetch("https://spotify.thefemdevs.com/playing/nezha", {}));
+
+        case 2:
+          response = _context5.sent;
+
+          if (response.ok) {
+            _context5.next = 5;
+            break;
+          }
+
+          throw new Error("Failed to fetch currently playing track");
+
+        case 5:
+          _context5.next = 7;
+          return regeneratorRuntime.awrap(response.json());
+
+        case 7:
+          data = _context5.sent;
+          return _context5.abrupt("return", {
+            trackName: data.item.name,
+            artistName: data.item.artists.map(function (artist) {
+              return artist.name;
+            }).join(", "),
+            trackUrl: data.item.external_urls.spotify
+          });
+
+        case 9:
+        case "end":
+          return _context5.stop();
+      }
+    }
+  });
+} // Function to update Discord RPC with Spotify track information
+
+
+function updateDiscordRPCWithSpotify() {
+  var _ref, trackName, artistName, trackUrl;
+
+  return regeneratorRuntime.async(function updateDiscordRPCWithSpotify$(_context6) {
+    while (1) {
+      switch (_context6.prev = _context6.next) {
+        case 0:
+          _context6.prev = 0;
+          _context6.next = 3;
+          return regeneratorRuntime.awrap(fetchCurrentlyPlayingTrack(accessToken));
+
+        case 3:
+          _ref = _context6.sent;
+          trackName = _ref.trackName;
+          artistName = _ref.artistName;
+          trackUrl = _ref.trackUrl;
+          RPC.setActivity({
+            details: "Listening to ".concat(trackName),
+            state: "by ".concat(artistName),
+            largeImageKey: "spotify",
+            buttons: [{
+              label: "Listen on Spotify",
+              url: trackUrl
+            }]
+          });
+          _context6.next = 13;
+          break;
+
+        case 10:
+          _context6.prev = 10;
+          _context6.t0 = _context6["catch"](0);
+          console.error("Failed to update Discord RPC with Spotify:", _context6.t0);
+
+        case 13:
+        case "end":
+          return _context6.stop();
+      }
+    }
+  }, null, null, [[0, 10]]);
+} // Example usage
+
+
+RPC.on("ready", function _callee2() {
+  return regeneratorRuntime.async(function _callee2$(_context7) {
+    while (1) {
+      switch (_context7.prev = _context7.next) {
+        case 0:
+          updateDiscordRPCWithSpotify();
+          setInterval(updateDiscordRPCWithSpotify, 15e3); // Update every 15 seconds
+
+        case 2:
+        case "end":
+          return _context7.stop();
+      }
+    }
+  });
 });
 RPC.login({
   clientId: clientId
