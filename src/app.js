@@ -4,41 +4,13 @@ const RPC = new DiscordRPC.Client({ transport: "ipc" });
 
 DiscordRPC.register(clientId);
 
-async function spotifyrpc (url) {
-   let spotifyRPC = await fetch("https://spotify.thefemdevs.com/playing/nezha").then(res => res.json())
-   console.log(spotifyRPC)
-}
-
-spotifyrpc()
-
 async function setActivity() {
+    let spotifyRPC = await fetch("https://spotify.thefemdevs.com/playing/nezha").then(res => res.json());
+    console.dir(spotifyRPC);
     if (!RPC) {
         return;
     }
-    
-    RPC.setActivity({
-        details: "Playing a game",
-        state: "In the menu",
-        largeImageKey: "large",
-        largeImageText: "Large Image",
-        smallImageKey: "small",
-        smallImageText: "Small Image",
-        instance: false,
-        buttons: [
-            { 
-                label: "Website", url: "https://nezha.thefemdevs.com" 
-            },
-            { 
-                label: "Spotify", url: "https://open.spotify.com/user/hpjv09y99ucx7adf3jb6qijvp?si=40ac1fa71e7d44ee" 
-            }
-        ]
-    });
-}
-
-async function setSpotifyRPC() {
-    if (!RPC) {
-        return;
-    }
+    const { title, artists, album, url } = spotifyRPC.song
     
     RPC.setActivity({
         details: "Listening to Spotify",
@@ -57,7 +29,6 @@ async function setSpotifyRPC() {
             }
         ]
     });
-
 }
 
 RPC.on("ready", async () => {
