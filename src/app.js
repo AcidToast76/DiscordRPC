@@ -11,11 +11,11 @@ async function setActivity() {
     if (!RPC) {
         return;
     }
-    const { title, artists, album, url } = spotifyRPC.song
+    const { name: title, artists, album, url } = spotifyRPC.song
     
     RPC.setActivity({
-        details: "Listening to Spotify",
-        state: "Warframe Bops",
+        state: "Listening To:",
+        details: title, " by ": artists, " on ": album,
         largeImageKey: "large",
         largeImageText: "Large Image",
         smallImageKey: "small",
@@ -27,6 +27,9 @@ async function setActivity() {
             },
             { 
                 label: "Spotify", url: "https://open.spotify.com/user/hpjv09y99ucx7adf3jb6qijvp?si=40ac1fa71e7d44ee" 
+            }
+            {
+                label: "Song", url: url
             }
         ]
     });
@@ -81,4 +84,4 @@ RPC.on("ready", async () => {
 
 RPC.login({ clientId }).catch(err => console.error(err));
 
-setSpotifyRPC()
+setActivity();
