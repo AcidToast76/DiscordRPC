@@ -91,4 +91,44 @@ function optimizeDiscordAPIRequests() {
               var spotifyData = fetch('https://spotify.thefemdevs.com/playing/nezha').then(function (res) {
                 return res.json();
               });
-              var spotifyTrack = spotifyData.playing.track.ti
+              var spotifyTrack = spotifyData.playing.track.title;
+
+              if (spotifyTrack !== spotifyData.playing.track.title) {
+                updateDiscordRPCWithSpotify();
+              } else {
+                continue;
+              }
+            }
+          }, 500);
+
+        case 1:
+        case "end":
+          return _context3.stop();
+      }
+    }
+  });
+}
+
+RPC.on("ready", function _callee() {
+  return regeneratorRuntime.async(function _callee$(_context4) {
+    while (1) {
+      switch (_context4.prev = _context4.next) {
+        case 0:
+          updateDiscordRPCWithSpotify();
+          setInterval(function () {
+            updateDiscordRPCWithSpotify();
+          }, 15e3);
+
+        case 2:
+        case "end":
+          return _context4.stop();
+      }
+    }
+  });
+});
+RPC.login({
+  clientId: clientId
+})["catch"](function (err) {
+  return console.error(err);
+});
+//# sourceMappingURL=app.dev.js.map
