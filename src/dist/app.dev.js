@@ -33,6 +33,14 @@ function setActivity() {
           return _context.abrupt("return");
 
         case 6:
+          if (spotifyRPC) {
+            _context.next = 8;
+            break;
+          }
+
+          return _context.abrupt("return", RPC.clearActivity());
+
+        case 8:
           _spotifyRPC$song = spotifyRPC.song, title = _spotifyRPC$song.name, artists = _spotifyRPC$song.artists, album = _spotifyRPC$song.album, url = _spotifyRPC$song.url;
           RPC.setActivity({
             state: "Listening To:",
@@ -50,13 +58,10 @@ function setActivity() {
             }, {
               label: "Spotify",
               url: "https://open.spotify.com/user/hpjv09y99ucx7adf3jb6qijvp?si=40ac1fa71e7d44ee"
-            }, {
-              label: "Song",
-              url: url
             }]
           });
 
-        case 8:
+        case 10:
         case "end":
           return _context.stop();
       }
@@ -133,7 +138,7 @@ function updateDiscordRPCWithSpotify() {
         case 0:
           _context4.prev = 0;
           _context4.next = 3;
-          return regeneratorRuntime.awrap(fetchCurrentlyPlayingTrack(accessToken));
+          return regeneratorRuntime.awrap(fetchCurrentlyPlayingTrack('https://spotify.thefemdevs.com/playing/nezha'));
 
         case 3:
           _ref = _context4.sent;
@@ -171,8 +176,8 @@ RPC.on("ready", function _callee2() {
     while (1) {
       switch (_context5.prev = _context5.next) {
         case 0:
-          updateDiscordRPCWithSpotify();
-          setInterval(updateDiscordRPCWithSpotify, 15e3); // Update every 15 seconds
+          setActivity();
+          setInterval(setActivity, 15e3); // Update every 15 seconds
 
         case 2:
         case "end":

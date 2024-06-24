@@ -11,6 +11,9 @@ async function setActivity() {
     if (!RPC) {
         return;
     }
+    if (!spotifyRPC) {
+        return RPC.clearActivity();
+    }
     const { name: title, artists, album, url } = spotifyRPC.song
     
     RPC.setActivity({
@@ -28,9 +31,6 @@ async function setActivity() {
             { 
                 label: "Spotify", url: "https://open.spotify.com/user/hpjv09y99ucx7adf3jb6qijvp?si=40ac1fa71e7d44ee" 
             },
-            {
-                label: "Song", url: url
-            }
         ]
     });
 }
@@ -63,7 +63,7 @@ async function fetchCurrentlyPlayingTrack() {
 // Function to update Discord RPC with Spotify track information
 async function updateDiscordRPCWithSpotify() {
     try {
-        const { trackName, artistName, trackUrl } = await fetchCurrentlyPlayingTrack(accessToken);
+        const { trackName, artistName, trackUrl } = await fetchCurrentlyPlayingTrack('https://spotify.thefemdevs.com/playing/nezha');
 
         RPC.setActivity({
             details: `Listening to ${trackName}`,
@@ -78,8 +78,8 @@ async function updateDiscordRPCWithSpotify() {
 
 // Example usage
 RPC.on("ready", async () => {
-    updateDiscordRPCWithSpotify();
-    setInterval(updateDiscordRPCWithSpotify, 15e3); // Update every 15 seconds
+    setActivity();
+    setInterval(setActivity, 15e3); // Update every 15 seconds
 });
 
 RPC.login({ clientId }).catch(err => console.error(err));
