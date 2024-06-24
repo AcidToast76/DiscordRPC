@@ -56,7 +56,7 @@ async function optimizeDiscordAPIRequests() {
 RPC.on("ready", async () => {
     updateDiscordRPCWithSpotify();
     setInterval(() => {
-        updateDiscordRPCWithSpotify();
+        optimizeDiscordAPIRequests();
     }, 15e3);
 });
 

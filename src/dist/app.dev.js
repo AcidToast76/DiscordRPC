@@ -116,7 +116,7 @@ RPC.on("ready", function _callee() {
         case 0:
           updateDiscordRPCWithSpotify();
           setInterval(function () {
-            updateDiscordRPCWithSpotify();
+            optimizeDiscordAPIRequests();
           }, 15e3);
 
         case 2:
