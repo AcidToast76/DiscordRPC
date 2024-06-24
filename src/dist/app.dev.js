@@ -63,6 +63,8 @@ function updateDiscordRPCWithSpotify() {
             state: "".concat(playing.track.title, " by ").concat(playing.artists[0].name, " on ").concat(playing.album.title),
             largeImageKey: playing.album.image,
             largeImageText: playing.album.title,
+            startTimestamp: playing.meta.start,
+            endTimestamp: playing.meta.end,
             buttons: [{
               label: "Listen on Spotify",
               url: playing.track.url
@@ -82,26 +84,34 @@ function updateDiscordRPCWithSpotify() {
 
 
 function optimizeDiscordAPIRequests() {
+  var spotifyData, isPlaying;
   return regeneratorRuntime.async(function optimizeDiscordAPIRequests$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
+          _context3.next = 2;
+          return regeneratorRuntime.awrap(fetch('https://spotify.thefemdevs.com/playing/nezha').then(function (res) {
+            return res.json();
+          }));
+
+        case 2:
+          spotifyData = _context3.sent;
+          isPlaying = spotifyData.isPlaying;
           setInterval(function () {
             while (isPlaying === true) {
-              var spotifyData = fetch('https://spotify.thefemdevs.com/playing/nezha').then(function (res) {
-                return res.json();
-              });
               var spotifyTrack = spotifyData.playing.track.title;
 
-              if (spotifyTrack !== spotifyData.playing.track.title) {
+              if (spotifyTrack !== null && spotifyTrack !== undefined) {
                 updateDiscordRPCWithSpotify();
+                console.dir(spotifyData);
+                return;
               } else {
                 continue;
               }
             }
           }, 500);
 
-        case 1:
+        case 5:
         case "end":
           return _context3.stop();
       }

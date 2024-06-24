@@ -26,6 +26,8 @@ async function updateDiscordRPCWithSpotify() {
         state: `${playing.track.title} by ${playing.artists[0].name} on ${playing.album.title}`,
         largeImageKey: playing.album.image,
         largeImageText: playing.album.title,
+        startTimestamp: playing.meta.start,
+        endTimestamp: playing.meta.end,
         buttons: [
             { label: "Listen on Spotify", url: playing.track.url },
             { label: "Website", url: "https://nezha.thefemdevs.com"},
@@ -38,19 +40,17 @@ async function updateDiscordRPCWithSpotify() {
 // Function to optimize Discord API requests
 
 async function optimizeDiscordAPIRequests() {
+    let lastSpotifyTrack = null;
 
-    setInterval(() => {
-        while (isPlaying === true) {
-            let spotifyData = fetch('https://spotify.thefemdevs.com/playing/nezha').then(res => res.json());
-            let spotifyTrack = spotifyData.playing.track.title;
-            
-            if (spotifyTrack !== spotifyData.playing.track.title) {
-                updateDiscordRPCWithSpotify();
-            } else {
-                continue;
-            }
-        }
-    }, 500);
+    let spotifyData = await fetch('https://spotify.thefemdevs.com/playing/nezha').then(res => res.json());
+    let newSpotifyTrack = spotifyData.playing?.track?.title;
+
+    if (newSpotifyTrack !== lastSpotifyTrack) {
+        lastSpotifyTrack = newSpotifyTrack;
+        updateDiscordRPCWithSpotify();
+        console.dir(spotifyData);
+    }
+
 }
 
 RPC.on("ready", async () => {
