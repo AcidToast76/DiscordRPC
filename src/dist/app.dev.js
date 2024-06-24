@@ -35,8 +35,7 @@ function spotifyJSONfetch(url) {
 spotifyJSONfetch(); // Function to update Discord RPC with Spotify track information
 
 function updateDiscordRPCWithSpotify() {
-  var spotifyData, _spotifyData$playing, playing, isPlaying;
-
+  var spotifyData, playing, isPlaying;
   return regeneratorRuntime.async(function updateDiscordRPCWithSpotify$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
@@ -58,11 +57,11 @@ function updateDiscordRPCWithSpotify() {
           return _context2.abrupt("return");
 
         case 6:
-          _spotifyData$playing = spotifyData.playing, playing = _spotifyData$playing.playing, isPlaying = _spotifyData$playing.isPlaying;
+          playing = spotifyData.playing, isPlaying = spotifyData.isPlaying;
           RPC.setActivity({
             details: "Listening To Spotify",
-            state: "".concat(playing.track.title, " by ").concat(playing.artists.name, " on ").concat(playing.album.title),
-            largeImageKey: playing.album.artists.image,
+            state: "".concat(playing.track.title, " by ").concat(playing.artists[0].name, " on ").concat(playing.album.title),
+            largeImageKey: playing.album.image,
             largeImageText: playing.album.title,
             buttons: [{
               label: "Listen on Spotify",
@@ -79,28 +78,17 @@ function updateDiscordRPCWithSpotify() {
       }
     }
   });
-}
+} // Function to optimize Discord API requests
 
-RPC.on("ready", function _callee() {
-  return regeneratorRuntime.async(function _callee$(_context3) {
+
+function optimizeDiscordAPIRequests() {
+  return regeneratorRuntime.async(function optimizeDiscordAPIRequests$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
-          updateDiscordRPCWithSpotify();
           setInterval(function () {
-            updateDiscordRPCWithSpotify();
-          }, 15e3);
-
-        case 2:
-        case "end":
-          return _context3.stop();
-      }
-    }
-  });
-});
-RPC.login({
-  clientId: clientId
-})["catch"](function (err) {
-  return console.error(err);
-});
-//# sourceMappingURL=app.dev.js.map
+            while (isPlaying === true) {
+              var spotifyData = fetch('https://spotify.thefemdevs.com/playing/nezha').then(function (res) {
+                return res.json();
+              });
+              var spotifyTrack = spotifyData.playing.track.ti
