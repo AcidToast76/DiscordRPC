@@ -18,15 +18,15 @@ async function updateDiscordRPCWithSpotify() {
         return;
     }
 
-    const { name, artists, album, url} = spotifyData.song
+    const { playing, isPlaying } = spotifyData.playing;
     
     RPC.setActivity({
         details: "Listening To Spotify",
-        state: `${name} by ${artists} on ${album}`,
-        largeImageKey: "spotify",
-        largeImageText: album,
+        state: `${playing.track.title} by ${playing.artists.name} on ${playing.album.title}`,
+        largeImageKey: playing.album.artists.image,
+        largeImageText: playing.album.title,
         buttons: [
-            { label: "Listen on Spotify", url },
+            { label: "Listen on Spotify", url: playing.track.url },
             { label: "Website", url: "https://nezha.thefemdevs.com"},
         ],
     })

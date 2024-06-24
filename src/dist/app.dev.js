@@ -35,7 +35,7 @@ function spotifyJSONfetch(url) {
 spotifyJSONfetch(); // Function to update Discord RPC with Spotify track information
 
 function updateDiscordRPCWithSpotify() {
-  var spotifyData, _spotifyData$song, name, artists, album, url;
+  var spotifyData, _spotifyData$playing, playing, isPlaying;
 
   return regeneratorRuntime.async(function updateDiscordRPCWithSpotify$(_context2) {
     while (1) {
@@ -58,15 +58,15 @@ function updateDiscordRPCWithSpotify() {
           return _context2.abrupt("return");
 
         case 6:
-          _spotifyData$song = spotifyData.song, name = _spotifyData$song.name, artists = _spotifyData$song.artists, album = _spotifyData$song.album, url = _spotifyData$song.url;
+          _spotifyData$playing = spotifyData.playing, playing = _spotifyData$playing.playing, isPlaying = _spotifyData$playing.isPlaying;
           RPC.setActivity({
             details: "Listening To Spotify",
-            state: "".concat(name, " by ").concat(artists, " on ").concat(album),
-            largeImageKey: "spotify",
-            largeImageText: album,
+            state: "".concat(playing.track.title, " by ").concat(playing.artists.name, " on ").concat(playing.album.title),
+            largeImageKey: playing.album.artists.image,
+            largeImageText: playing.album.title,
             buttons: [{
               label: "Listen on Spotify",
-              url: url
+              url: playing.track.url
             }, {
               label: "Website",
               url: "https://nezha.thefemdevs.com"
