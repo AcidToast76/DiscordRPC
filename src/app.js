@@ -42,23 +42,24 @@ async function updateDiscordRPCWithSpotify() {
 async function optimizeDiscordAPIRequests() {
     let lastSpotifyTrack = null;
 
-    let spotifyData = await fetch('https://spotify.thefemdevs.com/playing/nezha').then(res => res.json());
-    let newSpotifyTrack = spotifyData.playing?.track?.title;
+    setInterval(async () => {
+        try {
+            let spotifyData = await fetch('https://spotify.thefemdevs.com/playing/nezha').then(res => res.json());
+            let isPlaying = spotifyData.isPlaying;
+            let currentSpotifyTrack = spotifyData.playing?.track?.title;
 
-    if (newSpotifyTrack !== lastSpotifyTrack) {
-        lastSpotifyTrack = newSpotifyTrack;
-        updateDiscordRPCWithSpotify();
-        console.dir(spotifyData);
-    }
-
+            if (isPlaying && currentSpotifyTrack !== lastSpotifyTrack) {
+                await updateDiscordRPCWithSpotify(); // Ensure RPC is updated before proceeding
+                console.log(`Updated Discord RPC with: ${currentSpotifyTrack}`);
+                lastSpotifyTrack = currentSpotifyTrack; // Update the last track to the current one
+            }
+        } catch (error) {
+            console.error("Failed to update Discord RPC:", error);
+        }
+    }, 5000); // Check every 5 seconds. Adjust to 10000 for 10 seconds if preferred.
 }
 
-RPC.on("ready", async () => {
-    updateDiscordRPCWithSpotify();
-    setInterval(() => {
-        optimizeDiscordAPIRequests();
-    }, 15e3);
-});
+// Login to Discord RPC
 
 RPC.login({ clientId }).catch(err => console.error(err));
 
