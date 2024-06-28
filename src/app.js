@@ -61,6 +61,8 @@ async function optimizeDiscordAPIRequests() {
 
 // Login to Discord RPC
 
+optimizeDiscordAPIRequests();
+
 RPC.login({ clientId }).catch(err => console.error(err));
 
-
+; // Start optimizing Discord API requests
